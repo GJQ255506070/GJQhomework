@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我当皇帝那些事 - 皇帝养成系统</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- 登录界面 -->
+    <div id="login-screen" class="screen active">
+        <div class="login-container">
+            <div class="login-header">
+                <h1><i class="fas fa-crown"></i> 我当皇帝那些事</h1>
+                <p class="subtitle">登基称帝，执掌天下，开创盛世或沦为昏君，全在你的选择</p>
+            </div>
+
+            <div class="login-form">
+                <div class="form-group">
+                    <label for="emperor-name"><i class="fas fa-user"></i> 皇帝尊号</label>
+                    <input type="text" id="emperor-name" placeholder="请输入您的皇帝尊号" maxlength="10">
+                </div>
+
+                <div class="form-group">
+                    <label for="era-name"><i class="fas fa-scroll"></i> 年号</label>
+                    <input type="text" id="era-name" placeholder="请输入您的年号" maxlength="6">
+                </div>
+
+                <div class="form-group">
+                    <label for="dynasty-name"><i class="fas fa-landmark"></i> 国号</label>
+                    <input type="text" id="dynasty-name" placeholder="请输入您的国号" maxlength="8">
+                </div>
+
+                <div class="hint">
+                    <p><i class="fas fa-info-circle"></i> 提示：游戏共20个阶段，每个阶段代表一年，您的选择将决定国家命运</p>
+                </div>
+
+                <button id="start-game" class="btn-primary">
+                    <i class="fas fa-play"></i> 登基称帝
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 皇帝主界面 -->
+    <div id="game-screen" class="screen">
+        <div class="game-container">
+            <!-- 顶部状态栏 -->
+            <div class="status-bar">
+                <div class="status-item">
+                    <span class="status-label">皇帝：</span>
+                    <span id="current-emperor" class="status-value">--</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">年号：</span>
+                    <span id="current-era" class="status-value">--</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">阶段：</span>
+                    <span id="current-stage" class="status-value">第1/20阶段</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">当前时间：</span>
+                    <span id="current-time" class="status-value">清晨</span>
+                </div>
+            </div>
+
+            <!-- 主要内容区域 -->
+            <div class="main-game-area">
+                <!-- 左侧：龙椅和技能区 -->
+                <div class="left-panel">
+                    <!-- 龙椅背景区 -->
+                    <div class="throne-area">
+                        <div class="throne">
+                            <i class="fas fa-crown throne-icon"></i>
+                            <div class="dragon-left"><i class="fas fa-dragon"></i></div>
+                            <div class="dragon-right"><i class="fas fa-dragon"></i></div>
+                        </div>
+
+                        <!-- 技能条显示 -->
+                        <div class="skills-panel">
+                            <div class="skill-bar">
+                                <div class="skill-label">
+                                    <i class="fas fa-brain"></i> 人文素养：
+                                    <span id="human-skill">0</span>/150
+                                </div>
+                                <div class="skill-progress">
+                                    <div id="human-progress" class="skill-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+
+                            <div class="skill-bar">
+                                <div class="skill-label">
+                                    <i class="fas fa-tools"></i> 实践技巧：
+                                    <span id="practice-skill">0</span>/150
+                                </div>
+                                <div class="skill-progress">
+                                    <div id="practice-progress" class="skill-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+
+                            <div class="skill-bar">
+                                <div class="skill-label">
+                                    <i class="fas fa-dumbbell"></i> 身体素质：
+                                    <span id="physical-skill">0</span>/150
+                                </div>
+                                <div class="skill-progress">
+                                    <div id="physical-progress" class="skill-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右侧：事件选择和功能区 -->
+                <div class="right-panel">
+                    <!-- 事件选择区 -->
+                    <div class="event-selection">
+                        <h3 id="time-title">清晨时分，陛下请选择</h3>
+                        <div id="event-options" class="options-grid">
+                            <!-- 选项会通过JS动态生成 -->
+                        </div>
+
+                        <!-- 特殊操作按钮 -->
+                        <div class="special-actions">
+                            <button id="view-concubines" class="btn-secondary">
+                                <i class="fas fa-female"></i> 查看后宫
+                            </button>
+                            <button id="add-concubine" class="btn-secondary">
+                                <i class="fas fa-user-plus"></i> 添加妃嫔
+                            </button>
+                            <button id="save-game" class="btn-secondary">
+                                <i class="fas fa-save"></i> 保存进度
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 历史记录 -->
+                    <div class="history-panel">
+                        <h4><i class="fas fa-history"></i> 皇帝纪事</h4>
+                        <div id="history-log" class="history-log">
+                            <!-- 历史记录会通过JS动态生成 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 早朝界面 -->
+        <div id="morning-court-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-landmark"></i> 早朝议事</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="court-scene">
+                        <i class="fas fa-users court-icon"></i>
+                        <p>文武百官分列两侧，等候陛下圣裁</p>
+                    </div>
+
+                    <div class="court-issues">
+                        <h4>今日朝议要事：</h4>
+                        <div class="issue-list">
+                            <div class="issue-item">
+                                <i class="fas fa-seedling"></i>
+                                <span>江南水患，请求拨款赈灾</span>
+                            </div>
+                            <div class="issue-item">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>边境匈奴侵扰，守将请求增兵</span>
+                            </div>
+                            <div class="issue-item">
+                                <i class="fas fa-balance-scale"></i>
+                                <span>科举考试改革方案呈报</span>
+                            </div>
+                            <div class="issue-item">
+                                <i class="fas fa-road"></i>
+                                <span>修建直道以利商旅通行</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="court-actions">
+                        <button id="handle-court" class="btn-primary">
+                            <i class="fas fa-gavel"></i> 处理朝政
+                        </button>
+                        <button class="btn-secondary close-modal">
+                            <i class="fas fa-times"></i> 退朝
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 习文界面 -->
+        <div id="study-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-book"></i> 御书房学习</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="study-scene">
+                        <i class="fas fa-book-open study-icon"></i>
+                        <p>书山有路勤为径，学海无涯苦作舟</p>
+                    </div>
+
+                    <div class="study-options">
+                        <h4>请选择学习内容（最多选择两项）：</h4>
+                        <div class="options-grid">
+                            <div class="option-card study-option" data-type="classics">
+                                <div class="option-icon">
+                                    <i class="fas fa-scroll"></i>
+                                </div>
+                                <h5>经典典籍</h5>
+                                <p>四书五经，圣贤之道</p>
+                                <div class="skill-gain">
+                                    <i class="fas fa-brain"></i> +5 人文素养
+                                </div>
+                            </div>
+
+                            <div class="option-card study-option" data-type="art">
+                                <div class="option-icon">
+                                    <i class="fas fa-palette"></i>
+                                </div>
+                                <h5>文化艺术</h5>
+                                <p>诗词歌赋，琴棋书画</p>
+                                <div class="skill-gain">
+                                    <i class="fas fa-brain"></i> +5 人文素养
+                                </div>
+                            </div>
+
+                            <div class="option-card study-option" data-type="strategy">
+                                <div class="option-icon">
+                                    <i class="fas fa-chess-king"></i>
+                                </div>
+                                <h5>帝王之术</h5>
+                                <p>治国安邦，驭臣之道</p>
+                                <div class="skill-gain">
+                                    <i class="fas fa-tools"></i> +5 实践技巧
+                                </div>
+                            </div>
+
+                            <div class="option-card study-option" data-type="science">
+                                <div class="option-icon">
+                                    <i class="fas fa-flask"></i>
+                                </div>
+                                <h5>科学实用</h5>
+                                <p>天文地理，农工技术</p>
+                                <div class="skill-gain">
+                                    <i class="fas fa-tools"></i> +5 实践技巧
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="selected-count">
+                        <span id="selected-count">已选择：0/2</span>
+                    </div>
+
+                    <div class="study-actions">
+                        <button id="confirm-study" class="btn-primary" disabled>
+                            <i class="fas fa-check"></i> 开始学习
+                        </button>
+                        <button class="btn-secondary close-modal">
+                            <i class="fas fa-times"></i> 放弃学习
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 习武界面 -->
+        <div id="martial-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-fist-raised"></i> 校场习武</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="martial-scene">
+                        <i class="fas fa-horse martial-icon"></i>
+                        <p>强身健体，保家卫国</p>
+                    </div>
+
+                    <div class="martial-options">
+                        <h4>请选择训练内容：</h4>
+                        <div class="options-grid">
+                            <div class="option-card martial-option" data-type="riding">
+                                <div class="option-icon">
+                                    <i class="fas fa-horse-head"></i>
+                                </div>
+                                <h5>骑射武艺</h5>
+                                <p>骑马射箭，战场杀敌</p>
+                                <div class="skill-gain">
+                                    <i class="fas fa-dumbbell"></i> +5 身体素质
+                                </div>
+                            </div>
+
+                            <div class="option-card martial-option" data-type="strength">
+                                <div class="option-icon">
+                                    <i class="fas fa-dumbbell"></i>
+                                </div>
+                                <h5>体格训练</h5>
+                                <p>强健体魄，力能扛鼎</p>
+                                <div class="skill-gain">
+                                    <i class="fas fa-dumbbell"></i> +5 身体素质
+                                </div>
+                            </div>
+
+                            <div class="option-card martial-option" data-type="tactics">
+                                <div class="option-icon">
+                                    <i class="fas fa-chess-board"></i>
+                                </div>
+                                <h5>兵法大全</h5>
+                                <p>排兵布阵，运筹帷幄</p>
+                                <div class="skill-gain">
+                                    <i class="fas fa-tools"></i> +5 实践技巧
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="martial-actions">
+                        <button id="confirm-martial" class="btn-primary">
+                            <i class="fas fa-check"></i> 开始训练
+                        </button>
+                        <button class="btn-secondary close-modal">
+                            <i class="fas fa-times"></i> 放弃训练
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 后宫界面 -->
+        <div id="harem-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-female"></i> 后宫佳丽</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="harem-scene">
+                        <i class="fas fa-heart harem-icon"></i>
+                        <p>三千佳丽，尽待君临</p>
+                    </div>
+
+                    <div class="concubine-list-container">
+                        <div class="concubine-list" id="concubine-list">
+                            <div class="empty-harem" id="empty-harem">
+                                <i class="fas fa-user-slash"></i>
+                                <p>后宫空无一人，请先添加妃嫔</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="harem-actions">
+                        <button id="visit-harem" class="btn-primary" disabled>
+                            <i class="fas fa-walking"></i> 请先选择妃嫔
+                        </button>
+                        <button class="btn-secondary close-modal">
+                            <i class="fas fa-times"></i> 离开后宫
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 添加妃嫔界面 -->
+        <div id="add-concubine-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-user-plus"></i> 册封妃嫔</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="add-concubine-form">
+                        <div class="form-group">
+                            <label for="concubine-name"><i class="fas fa-signature"></i> 妃嫔姓名</label>
+                            <input type="text" id="concubine-name" placeholder="请输入妃嫔姓名" maxlength="6">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="concubine-title"><i class="fas fa-crown"></i> 封号</label>
+                            <select id="concubine-title">
+                                <option value="贵妃">贵妃</option>
+                                <option value="妃">妃</option>
+                                <option value="嫔">嫔</option>
+                                <option value="贵人">贵人</option>
+                                <option value="常在">常在</option>
+                                <option value="答应">答应</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="concubine-age"><i class="fas fa-birthday-cake"></i> 年龄</label>
+                            <input type="number" id="concubine-age" min="16" max="30" value="18">
+                        </div>
+
+                        <div class="form-group">
+                            <label><i class="fas fa-star"></i> 特长</label>
+                            <div class="talent-options">
+                                <label class="talent-option">
+                                    <input type="checkbox" name="talent" value="歌舞">
+                                    歌舞
+                                </label>
+                                <label class="talent-option">
+                                    <input type="checkbox" name="talent" value="诗词">
+                                    诗词
+                                </label>
+                                <label class="talent-option">
+                                    <input type="checkbox" name="talent" value="书画">
+                                    书画
+                                </label>
+                                <label class="talent-option">
+                                    <input type="checkbox" name="talent" value="音律">
+                                    音律
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="add-concubine-actions">
+                        <button id="confirm-add-concubine" class="btn-primary">
+                            <i class="fas fa-check"></i> 册封
+                        </button>
+                        <button class="btn-secondary close-modal">
+                            <i class="fas fa-times"></i> 取消
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 结局界面 -->
+        <div id="ending-modal" class="modal">
+            <div class="modal-content ending-content">
+                <div class="modal-header">
+                    <h3 id="ending-title">二十载春秋，终有定论</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="ending-scene">
+                        <i id="ending-icon" class="fas fa-crown"></i>
+                        <h2 id="emperor-evaluation">--</h2>
+                        <h3 id="dynasty-evaluation">--</h3>
+                    </div>
+
+                    <div class="ending-stats">
+                        <h4>二十年政绩统计：</h4>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-label">人文素养</div>
+                                <div class="stat-value" id="ending-human">0</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">实践技巧</div>
+                                <div class="stat-value" id="ending-practice">0</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">身体素质</div>
+                                <div class="stat-value" id="ending-physical">0</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">勤政比率</div>
+                                <div class="stat-value" id="ending-ratio">0%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ending-history">
+                        <h4>历史评价：</h4>
+                        <p id="ending-description">--</p>
+                    </div>
+
+                    <div class="ending-actions">
+                        <button id="restart-game" class="btn-primary">
+                            <i class="fas fa-redo"></i> 再临天下
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="data.js"></script>
+        <script src="script.js"></script>
+</body>
+
+</html>
